@@ -40,8 +40,10 @@ export function RootNavigator() {
           },
           headerTitleStyle: {
             color: theme.colors.text,
-            fontWeight: "700"
+            fontWeight: "700",
+            fontSize: 17
           },
+          headerTintColor: theme.colors.text,
           contentStyle: {
             backgroundColor: theme.colors.background
           }

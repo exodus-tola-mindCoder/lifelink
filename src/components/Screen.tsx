@@ -11,7 +11,11 @@ type Props = {
 };
 
 export function Screen({ children, padded = true, scroll = true }: Props) {
-  const content = <View style={[styles.content, padded && styles.padded]}>{children}</View>;
+  const content = (
+    <View style={[styles.content, padded && styles.padded]}>
+      <View style={styles.inner}>{children}</View>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -35,6 +39,11 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1
+  },
+  inner: {
+    width: "100%",
+    maxWidth: 720,
+    alignSelf: "center"
   },
   padded: {
     paddingHorizontal: theme.spacing.md,

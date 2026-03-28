@@ -43,26 +43,34 @@ export function FormField({
 
 const styles = StyleSheet.create({
   wrapper: {
-    gap: 6
+    gap: 8
   },
   label: {
-    fontSize: 14,
-    color: theme.colors.text,
-    fontWeight: "600"
+    fontSize: 11,
+    color: theme.colors.primary,
+    fontWeight: "700",
+    letterSpacing: 1,
+    textTransform: "uppercase"
   },
   input: {
     borderWidth: 1,
+    borderBottomWidth: 2,
     borderColor: theme.colors.border,
-    borderRadius: theme.radius.md,
-    backgroundColor: "#fff",
-    paddingHorizontal: 12,
-    minHeight: 46
+    borderRadius: theme.radius.none,
+    backgroundColor: "#FFFFFF",
+    color: theme.colors.text,
+    paddingHorizontal: 16,
+    minHeight: 56,
+    fontSize: 16
   },
   readOnly: {
-    backgroundColor: "#F8FAFC"
+    backgroundColor: "#F4F4F5",
+    color: theme.colors.mutedText,
+    borderColor: "#E4E4E7"
   },
   error: {
-    color: theme.colors.primaryDark,
-    fontSize: 12
+    color: theme.colors.danger,
+    fontSize: 12,
+    fontWeight: "600"
   }
 });

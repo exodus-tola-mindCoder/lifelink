@@ -41,12 +41,14 @@ export function LoginScreen({ navigation }: Props) {
 
   return (
     <Screen>
-      <Text style={styles.title}>Sign in as {selectedRole === "donor" ? "Donor" : "Hospital"}</Text>
-      <Text style={styles.subtitle}>Use your account to continue to the dashboard.</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Access {selectedRole === "donor" ? "Donor" : "Hospital"} Portal</Text>
+        <Text style={styles.subtitle}>Enter your credentials to coordinate response actions.</Text>
+      </View>
 
       <View style={styles.form}>
         <FormField
-          label="Email"
+          label="Email Address"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -62,35 +64,51 @@ export function LoginScreen({ navigation }: Props) {
         {formError ? <Text style={styles.error}>{formError}</Text> : null}
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        <PrimaryButton label="Sign in" onPress={() => void onSubmit()} loading={loading} />
+        <View style={styles.buttonGroup}>
+          <PrimaryButton label="Sign In" onPress={() => void onSubmit()} loading={loading} />
+          <PrimaryButton
+            label="Create Account"
+            variant="outline"
+            onPress={() => navigation.navigate("Signup")}
+          />
+        </View>
       </View>
-
-      <PrimaryButton
-        label="Create a new account"
-        variant="outline"
-        onPress={() => navigation.navigate("Signup")}
-      />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  header: {
+    marginBottom: 40,
+    borderLeftWidth: 4,
+    borderLeftColor: theme.colors.accent,
+    paddingLeft: 16
+  },
   title: {
-    fontSize: 24,
-    fontWeight: "800",
-    color: theme.colors.text
+    fontSize: 32,
+    fontWeight: "900",
+    color: theme.colors.primary,
+    letterSpacing: -1
   },
   subtitle: {
     marginTop: 8,
-    color: theme.colors.mutedText
+    color: theme.colors.mutedText,
+    lineHeight: 24,
+    fontSize: 16
   },
   form: {
-    marginTop: 30,
-    gap: theme.spacing.md,
-    marginBottom: 16
+    gap: theme.spacing.lg
+  },
+  buttonGroup: {
+    marginTop: 16,
+    gap: theme.spacing.md
   },
   error: {
-    color: theme.colors.primaryDark,
-    fontWeight: "600"
+    color: theme.colors.danger,
+    fontWeight: "700",
+    backgroundColor: "#FEE2E2",
+    padding: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: theme.colors.danger
   }
 });

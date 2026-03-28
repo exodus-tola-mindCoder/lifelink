@@ -17,14 +17,15 @@ export function PrimaryButton({ label, onPress, disabled, loading, variant = "pr
     <Pressable
       disabled={disabled || loading}
       onPress={onPress}
-      style={[
+      style={({ pressed }) => [
         styles.button,
         isOutline ? styles.outlineButton : styles.primaryButton,
+        pressed && !(disabled || loading) && styles.pressed,
         (disabled || loading) && styles.disabled
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={isOutline ? theme.colors.primary : "#fff"} />
+        <ActivityIndicator color={isOutline ? theme.colors.primary : "#F8FAFC"} />
       ) : (
         <Text style={[styles.text, isOutline ? styles.outlineText : styles.primaryText]}>
           {label}
@@ -36,29 +37,35 @@ export function PrimaryButton({ label, onPress, disabled, loading, variant = "pr
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 48,
-    borderRadius: theme.radius.md,
+    minHeight: 56,
+    borderRadius: theme.radius.none,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: theme.spacing.md
+    paddingHorizontal: theme.spacing.lg
   },
   primaryButton: {
-    backgroundColor: theme.colors.primary
+    backgroundColor: theme.colors.primary,
   },
   outlineButton: {
     borderWidth: 1,
     borderColor: theme.colors.primary,
-    backgroundColor: "#fff"
+    backgroundColor: "transparent"
+  },
+  pressed: {
+    opacity: 0.8,
+    transform: [{ scale: 0.98 }]
   },
   disabled: {
-    opacity: 0.65
+    opacity: 0.4
   },
   text: {
-    fontSize: 16,
-    fontWeight: "700"
+    fontSize: 15,
+    fontWeight: "700",
+    letterSpacing: 1,
+    textTransform: "uppercase"
   },
   primaryText: {
-    color: "#fff"
+    color: "#FFFFFF"
   },
   outlineText: {
     color: theme.colors.primary

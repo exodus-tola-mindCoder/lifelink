@@ -1,25 +1,45 @@
 export const theme = {
   colors: {
-    background: "#F4F7FB",
+    background: "#FAFAFA",
     surface: "#FFFFFF",
-    primary: "#E53935",
-    primaryDark: "#C62828",
-    text: "#1F2937",
-    mutedText: "#6B7280",
-    success: "#16A34A",
+    primary: "#09090B",
+    primaryDark: "#000000",
+    text: "#09090B",
+    mutedText: "#71717A",
+    success: "#10B981",
     warning: "#F59E0B",
-    border: "#E5E7EB"
+    border: "#E4E4E7",
+    accent: "#E11D48",
+    danger: "#EF4444"
   },
   spacing: {
-    xs: 6,
-    sm: 10,
+    xs: 8,
+    sm: 12,
     md: 16,
     lg: 24,
-    xl: 32
+    xl: 40,
+    xxl: 64
   },
   radius: {
-    sm: 8,
-    md: 12,
-    lg: 18
+    none: 0,
+    sm: 4,
+    md: 8,
+    lg: 12
+  },
+  shadow: {
+    card: {
+      shadowColor: "#09090B",
+      shadowOpacity: 0.04,
+      shadowRadius: 12,
+      shadowOffset: { width: 0, height: 4 },
+      elevation: 2
+    },
+    hover: {
+      shadowColor: "#E11D48",
+      shadowOpacity: 0.1,
+      shadowRadius: 20,
+      shadowOffset: { width: 0, height: 8 },
+      elevation: 4
+    }
   }
 };

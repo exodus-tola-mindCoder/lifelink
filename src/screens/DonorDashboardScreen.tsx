@@ -21,43 +21,55 @@ export function DonorDashboardScreen({ navigation }: Props) {
     <Screen>
       <View style={styles.header}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.heading}>Welcome, {currentUser?.name}</Text>
-          <Text style={styles.sub}>Be on standby for urgent donor matches near you.</Text>
+          <Text style={styles.heading}>DONOR CONSOLE</Text>
+          <Text style={styles.sub}>
+            <Text style={styles.name}>{currentUser?.name}</Text>
+            {"\n"}Standby for urgent matches.
+          </Text>
         </View>
         <PrimaryButton label="Logout" onPress={() => void logout()} variant="outline" />
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Availability</Text>
         <View style={styles.row}>
-          <Text style={styles.value}>{currentUser?.availability ? "ON" : "OFF"}</Text>
-          <Switch
-            value={Boolean(currentUser?.availability)}
-            onValueChange={(next) => void updateAvailability(next)}
-            trackColor={{ false: "#CFD4DC", true: "#FFB4B1" }}
-            thumbColor={currentUser?.availability ? theme.colors.primary : "#F9FAFB"}
-          />
+          <View>
+            <Text style={styles.cardTitle}>STATUS</Text>
+            <Text style={styles.meta}>Blood type: {currentUser?.bloodType}</Text>
+          </View>
+          <View style={styles.statusBadge}>
+            <Text style={[styles.statusText, currentUser?.availability ? styles.statusActive : styles.statusInactive]}>
+              {currentUser?.availability ? "ON DUTY" : "OFF DUTY"}
+            </Text>
+            <Switch
+              value={Boolean(currentUser?.availability)}
+              onValueChange={(next) => void updateAvailability(next)}
+              trackColor={{ false: "#E4E4E7", true: theme.colors.primary }}
+              thumbColor={"#FFFFFF"}
+            />
+          </View>
         </View>
-        <Text style={styles.meta}>
-          Blood type: {currentUser?.bloodType} • Location used internally for nearby matching.
-        </Text>
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Emergency Alerts</Text>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>EMERGENCY ALERTS</Text>
         {donorMatches.length === 0 ? (
-          <Text style={styles.meta}>No active nearby requests right now.</Text>
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyText}>NO ACTIVE REQUESTS.</Text>
+          </View>
         ) : (
           donorMatches.map((request) => (
             <View key={request.id} style={styles.alert}>
-              <Text style={styles.alertTitle}>
-                {request.hospitalName} needs {request.bloodType}
-              </Text>
-              <Text style={styles.meta}>
-                Urgency: {request.urgency.toUpperCase()} • Nearby donors available
-              </Text>
-              <Text style={styles.meta}>Suggested transport: KES {request.suggestedTransportAmount}</Text>
-              <PrimaryButton label="I'm available" onPress={() => void handleAvailable(request.id)} />
+              <View style={styles.alertHeader}>
+                <Text style={styles.alertType}>{request.bloodType}</Text>
+                <Text style={styles.alertUrgency}>
+                  URGENCY: {request.urgency.toUpperCase()}
+                </Text>
+              </View>
+              <View style={styles.alertBody}>
+                <Text style={styles.alertHospital}>{request.hospitalName}</Text>
+                <Text style={styles.alertMeta}>Transport Coverage: KES {request.suggestedTransportAmount}</Text>
+              </View>
+              <PrimaryButton label="RESPOND NOW" onPress={() => void handleAvailable(request.id)} />
             </View>
           ))
         )}
@@ -69,53 +81,136 @@ export function DonorDashboardScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
+    alignItems: "flex-start",
     gap: theme.spacing.sm,
-    marginBottom: theme.spacing.md
+    marginBottom: theme.spacing.xl,
+    paddingBottom: theme.spacing.lg,
+    borderBottomWidth: 4,
+    borderBottomColor: theme.colors.primary
   },
   heading: {
-    fontSize: 22,
+    fontSize: 13,
     fontWeight: "800",
-    color: theme.colors.text
+    color: theme.colors.accent,
+    letterSpacing: 2
   },
   sub: {
-    marginTop: 4,
-    color: theme.colors.mutedText
+    marginTop: 12,
+    color: theme.colors.mutedText,
+    lineHeight: 24,
+    fontSize: 16
+  },
+  name: {
+    color: theme.colors.primary,
+    fontWeight: "900",
+    fontSize: 24,
+    letterSpacing: -1
   },
   card: {
-    borderRadius: theme.radius.lg,
     borderWidth: 1,
+    borderBottomWidth: 3,
     borderColor: theme.colors.border,
-    backgroundColor: "#fff",
-    padding: theme.spacing.md,
-    gap: theme.spacing.sm,
-    marginBottom: theme.spacing.md
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.lg,
+    marginBottom: theme.spacing.xl
   },
   cardTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: theme.colors.text
+    fontSize: 11,
+    fontWeight: "800",
+    color: theme.colors.primary,
+    letterSpacing: 1.5,
+    marginBottom: 4
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center"
   },
-  value: {
-    fontWeight: "700",
-    color: theme.colors.primaryDark
+  statusBadge: {
+    alignItems: "flex-end",
+    gap: 8
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: "900",
+    letterSpacing: 1
+  },
+  statusActive: {
+    color: theme.colors.accent
+  },
+  statusInactive: {
+    color: theme.colors.mutedText
   },
   meta: {
-    color: theme.colors.mutedText
+    color: theme.colors.mutedText,
+    fontSize: 14
+  },
+  section: {
+    gap: theme.spacing.md
+  },
+  sectionTitle: {
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.5,
+    color: theme.colors.primary,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    paddingBottom: 8
+  },
+  emptyState: {
+    padding: theme.spacing.xl,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F4F4F5",
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderStyle: "dashed"
+  },
+  emptyText: {
+    color: theme.colors.mutedText,
+    fontWeight: "700",
+    letterSpacing: 2,
+    fontSize: 12
   },
   alert: {
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radius.md,
-    padding: theme.spacing.sm,
-    gap: 8
+    borderBottomWidth: 4,
+    borderColor: theme.colors.primary,
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.lg,
+    gap: theme.spacing.lg
   },
-  alertTitle: {
-    fontWeight: "700",
-    color: theme.colors.text
+  alertHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    paddingBottom: 12
+  },
+  alertType: {
+    fontSize: 32,
+    fontWeight: "900",
+    color: theme.colors.accent,
+    letterSpacing: -1
+  },
+  alertUrgency: {
+    fontSize: 12,
+    fontWeight: "800",
+    color: theme.colors.primary,
+    letterSpacing: 1
+  },
+  alertBody: {
+    gap: 4
+  },
+  alertHospital: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: theme.colors.primary,
+    letterSpacing: -0.5
+  },
+  alertMeta: {
+    fontSize: 15,
+    color: theme.colors.mutedText
   }
 });

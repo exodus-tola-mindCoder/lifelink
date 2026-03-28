@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useMemo, useState } from "react";
 
 import { PrimaryButton } from "../components/PrimaryButton";
@@ -33,86 +33,109 @@ export function HospitalDashboardScreen() {
     <Screen>
       <View style={styles.topRow}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.heading}>Welcome, {currentUser?.name}</Text>
-          <Text style={styles.sub}>Create blood emergencies and track live donor responses.</Text>
+          <Text style={styles.heading}>HOSPITAL COMMAND</Text>
+          <Text style={styles.sub}>
+            <Text style={styles.name}>{currentUser?.name}</Text>
+            {"\n"}Publish and track emergency requests.
+          </Text>
         </View>
         <PrimaryButton label="Logout" onPress={() => void logout()} variant="outline" />
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>New Emergency Request</Text>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>NEW EMERGENCY REQUEST</Text>
+        <View style={styles.formCard}>
+          <View style={styles.fieldGroup}>
+            <Text style={styles.label}>BLOOD TYPE</Text>
+            <View style={styles.optionRow}>
+              {bloodTypes.map((type) => (
+                <Pressable
+                  key={type}
+                  onPress={() => setBloodType(type)}
+                  style={[styles.option, bloodType === type && styles.optionActive]}
+                >
+                  <Text style={[styles.optionText, bloodType === type && styles.optionTextActive]}>{type}</Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
 
-        <Text style={styles.label}>Blood Type</Text>
-        <View style={styles.optionRow}>
-          {bloodTypes.map((type) => (
-            <Text
-              key={type}
-              style={[styles.option, bloodType === type && styles.optionActive]}
-              onPress={() => setBloodType(type)}
-            >
-              {type}
-            </Text>
-          ))}
+          <View style={styles.fieldGroup}>
+            <Text style={styles.label}>URGENCY</Text>
+            <View style={styles.optionRow}>
+              {urgencyLevels.map((level) => (
+                <Pressable
+                  key={level}
+                  onPress={() => setUrgency(level)}
+                  style={[styles.option, urgency === level && styles.optionActive]}
+                >
+                  <Text style={[styles.optionText, urgency === level && styles.optionTextActive]}>
+                    {level.toUpperCase()}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+
+          <View style={styles.fieldGroup}>
+            <Text style={styles.label}>RADIUS: {radiusKm} KM</Text>
+            <View style={styles.optionRow}>
+              {[5, 8, 10].map((km) => (
+                <Pressable
+                  key={km}
+                  onPress={() => setRadiusKm(km)}
+                  style={[styles.option, radiusKm === km && styles.optionActive]}
+                >
+                  <Text style={[styles.optionText, radiusKm === km && styles.optionTextActive]}>
+                    {km} KM
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+
+          <View style={{ marginTop: 8 }}>
+            <PrimaryButton label="PUBLISH REQUEST" loading={saving} onPress={() => void submitRequest()} />
+          </View>
         </View>
-
-        <Text style={styles.label}>Urgency</Text>
-        <View style={styles.optionRow}>
-          {urgencyLevels.map((level) => (
-            <Text
-              key={level}
-              style={[styles.option, urgency === level && styles.optionActive]}
-              onPress={() => setUrgency(level)}
-            >
-              {level.toUpperCase()}
-            </Text>
-          ))}
-        </View>
-
-        <Text style={styles.label}>Radius: {radiusKm} km</Text>
-        <View style={styles.optionRow}>
-          {[5, 8, 10].map((km) => (
-            <Text
-              key={km}
-              style={[styles.option, radiusKm === km && styles.optionActive]}
-              onPress={() => setRadiusKm(km)}
-            >
-              {km}km
-            </Text>
-          ))}
-        </View>
-
-        <PrimaryButton label="Create Request" loading={saving} onPress={() => void submitRequest()} />
       </View>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Active Requests</Text>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>ACTIVE REQUESTS</Text>
         {ownRequests.length === 0 ? (
-          <Text style={styles.empty}>No requests yet. Create one to notify nearby donors.</Text>
+          <View style={styles.emptyState}>
+            <Text style={styles.emptyText}>NO ACTIVE REQUESTS.</Text>
+          </View>
         ) : (
           ownRequests.map((request) => (
             <View key={request.id} style={styles.requestItem}>
               <View style={styles.requestTop}>
-                <Text style={styles.requestTitle}>
-                  {request.bloodType} • {request.urgency.toUpperCase()}
+                <View>
+                  <Text style={styles.requestType}>{request.bloodType}</Text>
+                  <Text style={styles.requestUrgency}>URGENCY: {request.urgency.toUpperCase()}</Text>
+                </View>
+                <View style={styles.statusBadge}>
+                  <Text
+                    style={[
+                      styles.status,
+                      request.status === "fulfilled" ? styles.statusDone : styles.statusOpen
+                    ]}
+                  >
+                    {request.status.toUpperCase()}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.requestBody}>
+                <Text style={styles.requestMeta}>
+                  <Text style={styles.metaLabel}>MATCHED:</Text> {request.matchedCount}   <Text style={styles.metaLabel}>RESPONDED:</Text> {request.responderIds.length}
                 </Text>
-                <Text
-                  style={[
-                    styles.status,
-                    request.status === "fulfilled" ? styles.statusDone : styles.statusOpen
-                  ]}
-                >
-                  {request.status.toUpperCase()}
+                <Text style={styles.requestMeta}>
+                  <Text style={styles.metaLabel}>TRANSPORT:</Text> KES {request.suggestedTransportAmount}
                 </Text>
               </View>
-              <Text style={styles.requestMeta}>
-                Nearby donors: {request.matchedCount} • Responses: {request.responderIds.length}
-              </Text>
-              <Text style={styles.requestMeta}>
-                Suggested transport: KES {request.suggestedTransportAmount}
-              </Text>
               {request.status === "open" ? (
                 <PrimaryButton
-                  label="Mark as Fulfilled"
+                  label="MARK AS FULFILLED"
                   variant="outline"
                   onPress={() => void markFulfilled(request.id)}
                 />
@@ -130,81 +153,156 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     gap: theme.spacing.sm,
-    marginBottom: theme.spacing.md
+    marginBottom: theme.spacing.xl,
+    paddingBottom: theme.spacing.lg,
+    borderBottomWidth: 4,
+    borderBottomColor: theme.colors.primary
   },
   heading: {
-    fontSize: 22,
+    fontSize: 13,
     fontWeight: "800",
-    color: theme.colors.text
+    color: theme.colors.accent,
+    letterSpacing: 2
   },
   sub: {
-    marginTop: 4,
-    color: theme.colors.mutedText
+    marginTop: 12,
+    color: theme.colors.mutedText,
+    lineHeight: 24,
+    fontSize: 16
   },
-  card: {
-    backgroundColor: "#fff",
-    borderRadius: theme.radius.lg,
+  name: {
+    color: theme.colors.primary,
+    fontWeight: "900",
+    fontSize: 24,
+    letterSpacing: -1
+  },
+  section: {
+    marginBottom: theme.spacing.xxl,
+    gap: theme.spacing.md
+  },
+  sectionTitle: {
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.5,
+    color: theme.colors.primary,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    paddingBottom: 8
+  },
+  formCard: {
+    backgroundColor: theme.colors.surface,
     borderWidth: 1,
+    borderBottomWidth: 3,
     borderColor: theme.colors.border,
-    padding: theme.spacing.md,
-    gap: theme.spacing.sm,
-    marginBottom: theme.spacing.md
+    padding: theme.spacing.lg,
+    gap: theme.spacing.xl
   },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: theme.colors.text
+  fieldGroup: {
+    gap: 12
   },
   label: {
-    marginTop: 6,
-    color: theme.colors.text,
-    fontWeight: "600"
+    fontSize: 11,
+    color: theme.colors.primary,
+    fontWeight: "700",
+    letterSpacing: 1
   },
   optionRow: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: theme.spacing.xs
+    gap: 8
   },
   option: {
     borderWidth: 1,
+    borderBottomWidth: 2,
     borderColor: theme.colors.border,
-    borderRadius: 999,
-    paddingHorizontal: 11,
-    paddingVertical: 6,
-    backgroundColor: "#fff",
-    color: theme.colors.text,
-    overflow: "hidden"
+    borderRadius: theme.radius.none,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: theme.colors.surface
   },
   optionActive: {
-    backgroundColor: "#FFEDEE",
-    borderColor: theme.colors.primary,
-    color: theme.colors.primaryDark
+    backgroundColor: theme.colors.primary,
+    borderColor: theme.colors.accent,
+    borderBottomWidth: 2
   },
-  empty: {
-    color: theme.colors.mutedText
+  optionText: {
+    color: theme.colors.text,
+    fontWeight: "800",
+    fontSize: 13,
+    letterSpacing: 0.5
+  },
+  optionTextActive: {
+    color: "#FFFFFF"
+  },
+  emptyState: {
+    padding: theme.spacing.xl,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#F4F4F5",
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderStyle: "dashed"
+  },
+  emptyText: {
+    color: theme.colors.mutedText,
+    fontWeight: "700",
+    letterSpacing: 2,
+    fontSize: 12
   },
   requestItem: {
     borderWidth: 1,
+    borderLeftWidth: 4,
     borderColor: theme.colors.border,
-    borderRadius: theme.radius.md,
-    padding: theme.spacing.sm,
-    gap: 8
+    borderLeftColor: theme.colors.primary,
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.lg,
+    gap: theme.spacing.lg
   },
   requestTop: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "flex-start",
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    paddingBottom: 12
   },
-  requestTitle: {
-    fontWeight: "700",
-    color: theme.colors.text
+  requestType: {
+    fontSize: 32,
+    fontWeight: "900",
+    color: theme.colors.accent,
+    letterSpacing: -1
+  },
+  requestUrgency: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: theme.colors.primary,
+    letterSpacing: 1,
+    marginTop: 4
+  },
+  requestBody: {
+    gap: 8
   },
   requestMeta: {
+    fontSize: 14,
+    color: theme.colors.primary,
+    fontWeight: "500"
+  },
+  metaLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1,
     color: theme.colors.mutedText
   },
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: theme.colors.border
+  },
   status: {
-    fontWeight: "700",
-    fontSize: 12
+    fontWeight: "800",
+    fontSize: 10,
+    letterSpacing: 1
   },
   statusOpen: {
     color: theme.colors.warning

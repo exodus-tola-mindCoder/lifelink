@@ -64,11 +64,14 @@ export function SignupScreen({ navigation }: Props) {
 
   return (
     <Screen>
-      <Text style={styles.title}>Create {selectedRole === "donor" ? "Donor" : "Hospital"} account</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Register {selectedRole === "donor" ? "Donor" : "Hospital"}</Text>
+        <Text style={styles.subtitle}>Set up your profile for faster emergency matching.</Text>
+      </View>
       <View style={styles.form}>
-        <FormField label="Full name" value={name} onChangeText={setName} placeholder="Your name" />
+        <FormField label="Full Name" value={name} onChangeText={setName} placeholder="Your name" />
         <FormField
-          label="Email"
+          label="Email Address"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -84,7 +87,7 @@ export function SignupScreen({ navigation }: Props) {
 
         {selectedRole === "donor" ? (
           <View>
-            <Text style={styles.fieldLabel}>Blood type</Text>
+            <Text style={styles.fieldLabel}>BLOOD TYPE</Text>
             <View style={styles.pillWrap}>
               {bloodTypes.map((type) => (
                 <Pressable
@@ -109,28 +112,48 @@ export function SignupScreen({ navigation }: Props) {
         {formError ? <Text style={styles.error}>{formError}</Text> : null}
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
-        <PrimaryButton label="Sign up" onPress={() => void onSubmit()} loading={loading} />
+        <View style={styles.buttonGroup}>
+          <PrimaryButton label="Sign Up" onPress={() => void onSubmit()} loading={loading} />
+          <PrimaryButton label="Back to Sign In" variant="outline" onPress={() => navigation.goBack()} />
+        </View>
       </View>
-      <PrimaryButton label="Already have an account? Sign in" variant="outline" onPress={() => navigation.goBack()} />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  header: {
+    marginBottom: 40,
+    borderLeftWidth: 4,
+    borderLeftColor: theme.colors.accent,
+    paddingLeft: 16
+  },
   title: {
-    fontSize: 24,
-    fontWeight: "800",
-    color: theme.colors.text
+    fontSize: 32,
+    fontWeight: "900",
+    color: theme.colors.primary,
+    letterSpacing: -1
+  },
+  subtitle: {
+    marginTop: 8,
+    color: theme.colors.mutedText,
+    lineHeight: 24,
+    fontSize: 16
   },
   form: {
-    marginTop: 20,
+    gap: theme.spacing.lg
+  },
+  buttonGroup: {
+    marginTop: 16,
     gap: theme.spacing.md,
-    marginBottom: 16
+    marginBottom: theme.spacing.xl
   },
   fieldLabel: {
-    color: theme.colors.text,
-    fontWeight: "600",
-    marginBottom: theme.spacing.xs
+    color: theme.colors.primary,
+    fontWeight: "700",
+    letterSpacing: 1,
+    fontSize: 11,
+    marginBottom: theme.spacing.sm
   },
   pillWrap: {
     flexDirection: "row",
@@ -139,25 +162,32 @@ const styles = StyleSheet.create({
   },
   pill: {
     borderWidth: 1,
+    borderBottomWidth: 2,
     borderColor: theme.colors.border,
-    borderRadius: 999,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    backgroundColor: "#fff"
+    borderRadius: theme.radius.none,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    backgroundColor: theme.colors.surface
   },
   pillActive: {
-    borderColor: theme.colors.primary,
-    backgroundColor: "#FFEDEE"
+    borderColor: theme.colors.accent,
+    backgroundColor: theme.colors.primary,
+    borderBottomWidth: 2
   },
   pillText: {
     color: theme.colors.text,
-    fontWeight: "600"
+    fontWeight: "800",
+    fontSize: 15
   },
   pillTextActive: {
-    color: theme.colors.primaryDark
+    color: "#FFFFFF"
   },
   error: {
-    color: theme.colors.primaryDark,
-    fontWeight: "600"
+    color: theme.colors.danger,
+    fontWeight: "700",
+    backgroundColor: "#FEE2E2",
+    padding: 12,
+    borderLeftWidth: 4,
+    borderLeftColor: theme.colors.danger
   }
 });

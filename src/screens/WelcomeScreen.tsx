@@ -18,58 +18,119 @@ export function WelcomeScreen({ navigation }: Props) {
   }
 
   return (
-    <Screen>
-      <View style={styles.centered}>
-        <Text style={styles.title}>LifeLink</Text>
-        <Text style={styles.subtitle}>
-          Real-time emergency blood support connecting hospitals and nearby donors.
-        </Text>
-      </View>
+    <Screen scroll={false} padded={false}>
+      <View style={styles.container}>
+        <View style={styles.topSection}>
+          <View style={styles.accentLine} />
+          <Text style={styles.eyebrow}>CRITICAL RESPONSE</Text>
+          <Text style={styles.title}>LifeLink.</Text>
+          <Text style={styles.subtitle}>
+            A real-time synchronization layer for emergency blood logistics.
+          </Text>
+        </View>
 
-      <View style={styles.block}>
-        <PrimaryButton label="Continue as Donor" onPress={() => void pickRole("donor")} />
-        <PrimaryButton
-          label="Continue as Hospital"
-          onPress={() => void pickRole("hospital")}
-          variant="outline"
-        />
-      </View>
+        <View style={styles.bottomSection}>
+          <View style={styles.block}>
+            <PrimaryButton label="Sign in as Donor" onPress={() => void pickRole("donor")} />
+            <PrimaryButton
+              label="Sign in as Hospital"
+              onPress={() => void pickRole("hospital")}
+              variant="outline"
+            />
+          </View>
 
-      <Text style={styles.demo}>
-        Demo accounts:
-        {"\n"}Donor: donor.a@lifelink.app / password123
-        {"\n"}Hospital: hospital@lifelink.app / password123
-      </Text>
+          <View style={styles.demoCard}>
+            <Text style={styles.demoLabel}>DEMO CREDENTIALS</Text>
+            <View style={styles.demoRow}>
+              <Text style={styles.demoRole}>Donor</Text>
+              <Text style={styles.demoCreds}>donor.a@lifelink.app / password123</Text>
+            </View>
+            <View style={styles.demoRow}>
+              <Text style={styles.demoRole}>Hospital</Text>
+              <Text style={styles.demoCreds}>hospital@lifelink.app / password123</Text>
+            </View>
+          </View>
+        </View>
+      </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  centered: {
-    marginTop: 44,
-    gap: theme.spacing.sm
+  container: {
+    flex: 1,
+    justifyContent: "space-between",
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: 80,
+    paddingBottom: theme.spacing.xl,
+    backgroundColor: theme.colors.background,
+  },
+  topSection: {
+    gap: theme.spacing.sm,
+  },
+  accentLine: {
+    width: 48,
+    height: 4,
+    backgroundColor: theme.colors.accent,
+    marginBottom: theme.spacing.md,
+  },
+  eyebrow: {
+    color: theme.colors.accent,
+    letterSpacing: 2,
+    textTransform: "uppercase",
+    fontSize: 11,
+    fontWeight: "700",
   },
   title: {
-    fontSize: 34,
-    fontWeight: "800",
-    color: theme.colors.primary
+    fontSize: 56,
+    fontWeight: "900",
+    color: theme.colors.primary,
+    letterSpacing: -2,
+    lineHeight: 60,
   },
   subtitle: {
-    fontSize: 16,
-    color: theme.colors.text,
-    lineHeight: 22
+    fontSize: 18,
+    color: theme.colors.mutedText,
+    lineHeight: 26,
+    marginTop: 8,
+    maxWidth: 320,
+    fontWeight: "400",
+  },
+  bottomSection: {
+    gap: theme.spacing.xl,
   },
   block: {
-    marginTop: 42,
-    gap: theme.spacing.md
+    gap: theme.spacing.md,
   },
-  demo: {
-    marginTop: 36,
-    borderRadius: theme.radius.md,
-    backgroundColor: "#fff",
+  demoCard: {
+    backgroundColor: theme.colors.surface,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    padding: theme.spacing.md,
-    color: theme.colors.mutedText
-  }
+    padding: theme.spacing.lg,
+    gap: theme.spacing.sm,
+  },
+  demoLabel: {
+    fontSize: 10,
+    fontWeight: "800",
+    color: theme.colors.mutedText,
+    letterSpacing: 1.5,
+    marginBottom: 4,
+  },
+  demoRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    paddingBottom: 8,
+  },
+  demoRole: {
+    fontSize: 13,
+    fontWeight: "700",
+    color: theme.colors.text,
+  },
+  demoCreds: {
+    fontSize: 13,
+    color: theme.colors.mutedText,
+    fontFamily: "monospace",
+  },
 });
