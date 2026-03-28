@@ -1,0 +1,32 @@
+[debug] [2026-03-28T09:33:49.030Z] ----------------------------------------------------------------------
+[debug] [2026-03-28T09:33:49.032Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ashen\OneDrive\Desktop\Cursor_Hackathon\functions\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only functions
+[debug] [2026-03-28T09:33:49.032Z] CLI Version:   14.27.0
+[debug] [2026-03-28T09:33:49.032Z] Platform:      win32
+[debug] [2026-03-28T09:33:49.032Z] Node Version:  v24.14.1
+[debug] [2026-03-28T09:33:49.032Z] Time:          Sat Mar 28 2026 12:33:49 GMT+0300 (East Africa Time)
+[debug] [2026-03-28T09:33:49.032Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-28T09:33:49.157Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] Failed to authenticate, have you run firebase login?
+[warn] !  emulators: You are not currently authenticated so some features may not work correctly. Please run firebase login to authenticate the CLI. 
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[warn] !  hub: emulator hub unable to start on port 4400, starting on 4401 instead. {"metadata":{"emulator":{"name":"hub"},"message":"emulator hub unable to start on port 4400, starting on 4401 instead."}}
+[warn] !  ui: Emulator UI unable to start on port 4000, starting on 4001 instead. {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI unable to start on port 4000, starting on 4001 instead."}}
+[warn] !  logging: Logging Emulator unable to start on port 4500, starting on 4501 instead. {"metadata":{"emulator":{"name":"logging"},"message":"Logging Emulator unable to start on port 4500, starting on 4501 instead."}}
+[debug] [2026-03-28T09:33:49.181Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-03-28T09:33:49.182Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4401},{"address":"::1","family":"IPv6","port":4401}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4001},{"address":"::1","family":"IPv6","port":4001}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4501}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2026-03-28T09:33:49.184Z] Emulator locator file path: C:\Users\ashen\AppData\Local\Temp\hub-lifelink-20ac5.json
+[debug] [2026-03-28T09:33:49.184Z] [hub] writing locator at C:\Users\ashen\AppData\Local\Temp\hub-lifelink-20ac5.json
+[warn] !  eventarc: Eventarc Emulator unable to start on port 9299, starting on 9300 instead. {"metadata":{"emulator":{"name":"eventarc"},"message":"Eventarc Emulator unable to start on port 9299, starting on 9300 instead."}}
+[debug] [2026-03-28T09:33:49.204Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[warn] !  tasks: Cloud Tasks Emulator unable to start on port 9499, starting on 9500 instead. {"metadata":{"emulator":{"name":"tasks"},"message":"Cloud Tasks Emulator unable to start on port 9499, starting on 9500 instead."}}
+[debug] [2026-03-28T09:33:49.204Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-03-28T09:33:49.204Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4401},{"address":"::1","family":"IPv6","port":4401}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4001},{"address":"::1","family":"IPv6","port":4001}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4501}],"functions":[{"address":"0.0.0.0","family":"IPv4","port":5002}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9300}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9500}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: apphosting, auth, firestore, database, hosting, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mapphosting, auth, firestore, database, hosting, pubsub, storage, dataconnect\u001b[22m"}}
+[debug] [2026-03-28T09:33:49.207Z] No OAuth tokens found
+[debug] [2026-03-28T09:33:49.207Z] No OAuth tokens found
+[debug] [2026-03-28T09:33:49.208Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-28T09:33:49.208Z] Failed to get Admin SDK config for lifelink-20ac5, falling back to cache Failed to get Admin SDK for Firebase project lifelink-20ac5. Please make sure the project exists and your account has permission to access it. {"name":"FirebaseError","children":[],"exit":2,"message":"Failed to get Admin SDK for Firebase project lifelink-20ac5. Please make sure the project exists and your account has permission to access it.","original":{"name":"FirebaseError","children":[],"exit":1,"message":"Failed to authenticate, have you run \u001b[1mfirebase login\u001b[22m?","original":{},"status":500},"status":500}
+[warn] !  functions: Unable to fetch project Admin SDK configuration, Admin SDK behavior in Cloud Functions emulator may be incorrect. {"metadata":{"emulator":{"name":"functions"},"message":"Unable to fetch project Admin SDK configuration, Admin SDK behavior in Cloud Functions emulator may be incorrect."}}
+[info] i  functions: Watching "C:\Users\ashen\OneDrive\Desktop\Cursor_Hackathon\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\ashen\\OneDrive\\Desktop\\Cursor_Hackathon\\functions\" for Cloud Functions..."}}
+[debug] [2026-03-28T09:33:49.227Z] Validating nodejs source

@@ -74,7 +74,7 @@ export function calculateSuggestedCost(distanceKm: number, urgency: UrgencyLevel
   return Math.max(200, Math.min(amount, 2500));
 }
 
-export function randomTransactionId(): string {
+export function generateTransactionId(): string {
   const part = Math.floor(100000 + Math.random() * 900000);
-  return `LLX${part}${Date.now().toString().slice(-4)}`;
+  return `LLX${part}`;
 }

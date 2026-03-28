@@ -1,0 +1,15 @@
+{
+  "name": "expo-cicd-workflow-tools",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Utilities for Expo EAS workflow docs fetch and validation.",
+  "type": "commonjs",
+  "scripts": {
+    "validate": "node validate.js"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "yaml": "^2.8.1"
+  }
+}

@@ -9,7 +9,7 @@ import {
   useState
 } from "react";
 
-import { calculateSuggestedCost, getDistanceKm, getMatchingDonors, randomTransactionId } from "../services/matching";
+import { calculateSuggestedCost, generateTransactionId, getDistanceKm, getMatchingDonors } from "../services/matching";
 import { getCurrentLocation } from "../services/location";
 import { keys, readJson, writeJson } from "../services/storage";
 import type {
@@ -48,7 +48,12 @@ type CreateRequestPayload = {
 type PayPayload = {
   requestId: string;
   donorId: string;
+  phone: string;
   amount: number;
+  transactionId?: string;
+  checkoutRequestId?: string;
+  merchantRequestId?: string;
+  responseDescription?: string;
 };
 
 type AppContextValue = {
@@ -400,14 +405,16 @@ export function AppProvider({ children }: PropsWithChildren) {
   }
 
   async function payForTransport(payload: PayPayload): Promise<PaymentRecord> {
-    await fakeDelay(2300);
-
     const payment: PaymentRecord = {
       id: `pay-${Date.now()}`,
       requestId: payload.requestId,
       donorId: payload.donorId,
+      phone: payload.phone,
       amount: payload.amount,
-      transactionId: randomTransactionId(),
+      transactionId: payload.transactionId ?? generateTransactionId(),
+      checkoutRequestId: payload.checkoutRequestId,
+      merchantRequestId: payload.merchantRequestId,
+      responseDescription: payload.responseDescription,
       createdAt: new Date().toISOString()
     };
 

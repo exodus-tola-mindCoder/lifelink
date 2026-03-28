@@ -26,6 +26,9 @@
       "expo-location"
     ],
     "extra": {
+      "mpesa": {
+        "proxyUrl": ""
+      },
       "firebase": {
         "apiKey": "",
         "authDomain": "",

@@ -7,6 +7,8 @@ import { FormField } from "../components/FormField";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { Screen } from "../components/Screen";
 import { useApp } from "../context/AppContext";
+import { generateTransactionId } from "../services/matching";
+import { requestMpesaStkPayment } from "../services/mpesaService";
 import { theme } from "../theme/theme";
 import type { RootStackParamList } from "../navigation/types";
 
@@ -21,9 +23,13 @@ export function PaymentScreen({ route }: Props) {
 
   const suggested = request?.suggestedTransportAmount ?? 0;
   const [customAmount, setCustomAmount] = useState(String(suggested));
+  const [phone, setPhone] = useState("");
   const [coverFull, setCoverFull] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<{ amount: number; txId: string } | undefined>(undefined);
+  const [loadingMessage, setLoadingMessage] = useState("Sending request to M-Pesa...");
+  const [result, setResult] = useState<{ amount: number; txId: string; message?: string } | undefined>(
+    undefined
+  );
   const [error, setError] = useState<string | undefined>(undefined);
 
   if (!request || !currentUser) {
@@ -37,27 +43,68 @@ export function PaymentScreen({ route }: Props) {
   const currentRequest = request;
   const donor = currentUser;
 
+  function sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  function isValidMpesaPhone(value: string): boolean {
+    const normalized = value.replace(/\D/g, "");
+    return /^2547\d{8}$/.test(normalized) || /^251[79]\d{8}$/.test(normalized);
+  }
+
   async function payNow() {
     setError(undefined);
-    setLoading(true);
+
+    const normalizedPhone = phone.replace(/\D/g, "");
+    if (!isValidMpesaPhone(normalizedPhone)) {
+      setError("Phone must be like 2547XXXXXXXX or 2517/2519XXXXXXXX.");
+      return;
+    }
 
     const parsed = Number(customAmount);
     const finalAmount = coverFull ? suggested : parsed;
 
     if (Number.isNaN(finalAmount) || finalAmount <= 0) {
       setError("Enter a valid amount.");
-      setLoading(false);
       return;
     }
 
-    const record = await payForTransport({
-      requestId: currentRequest.id,
-      donorId: donor.id,
-      amount: finalAmount
-    });
+    setLoading(true);
+    setLoadingMessage("Sending request to M-Pesa...");
 
-    setResult({ amount: finalAmount, txId: record.transactionId });
-    setLoading(false);
+    try {
+      const apiResponse = await requestMpesaStkPayment({
+        phone: normalizedPhone,
+        amount: finalAmount
+      });
+
+      setLoadingMessage("Awaiting payment confirmation...");
+      await sleep(2200);
+
+      const txId = generateTransactionId();
+      const record = await payForTransport({
+        requestId: currentRequest.id,
+        donorId: donor.id,
+        phone: normalizedPhone,
+        amount: finalAmount,
+        transactionId: txId,
+        checkoutRequestId: apiResponse.CheckoutRequestID,
+        merchantRequestId: apiResponse.MerchantRequestID,
+        responseDescription: apiResponse.ResponseDescription
+      });
+
+      setResult({
+        amount: finalAmount,
+        txId: record.transactionId,
+        message: apiResponse.CustomerMessage
+      });
+    } catch (paymentError) {
+      setError(
+        paymentError instanceof Error ? paymentError.message : "Payment request failed. Try again."
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -83,12 +130,21 @@ export function PaymentScreen({ route }: Props) {
           editable={!coverFull}
         />
 
+        <FormField
+          label="M-Pesa phone number"
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="numeric"
+          placeholder="2547XXXXXXXX or 2517XXXXXXXX"
+        />
+
         <View style={styles.checkboxRow}>
           <Checkbox value={coverFull} onValueChange={setCoverFull} color={coverFull ? theme.colors.primary : undefined} />
           <Text style={styles.checkboxLabel}>I want to cover full transport expense myself</Text>
         </View>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
+        {loading ? <Text style={styles.loadingText}>{loadingMessage}</Text> : null}
         <PrimaryButton label="Pay with M-Pesa" loading={loading} onPress={() => void payNow()} />
       </View>
 
@@ -97,6 +153,7 @@ export function PaymentScreen({ route }: Props) {
           <Text style={styles.successTitle}>Payment Successful</Text>
           <Text style={styles.successText}>Paid Amount: KES {result.amount}</Text>
           <Text style={styles.successText}>Transaction ID: {result.txId}</Text>
+          {result.message ? <Text style={styles.successText}>{result.message}</Text> : null}
         </View>
       ) : null}
     </Screen>
@@ -133,6 +190,10 @@ const styles = StyleSheet.create({
   },
   error: {
     color: theme.colors.primaryDark,
+    fontWeight: "600"
+  },
+  loadingText: {
+    color: theme.colors.text,
     fontWeight: "600"
   },
   success: {

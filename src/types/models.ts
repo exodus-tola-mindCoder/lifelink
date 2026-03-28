@@ -41,7 +41,11 @@ export type PaymentRecord = {
   id: string;
   requestId: string;
   donorId: string;
+  phone: string;
   amount: number;
   transactionId: string;
+  checkoutRequestId?: string;
+  merchantRequestId?: string;
+  responseDescription?: string;
   createdAt: string;
 };
