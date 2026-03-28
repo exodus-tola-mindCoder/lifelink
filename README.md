@@ -78,14 +78,6 @@ npm run start
 - `npm run functions:build` - build Firebase Functions TypeScript
 - `npm run functions:serve` - run local Firebase Functions emulator
 
-## Demo Accounts (pre-seeded)
-
-- Donor:
-  - Email: `donor.a@lifelink.app`
-  - Password: `password123`
-- Hospital:
-  - Email: `hospital@lifelink.app`
-  - Password: `password123`
 
 ## Core Demo Flow (recommended)
 
