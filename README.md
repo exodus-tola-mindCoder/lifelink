@@ -193,11 +193,4 @@ Examples:
 - **Daraja errors from sandbox**
   - Confirm `MPESA_*` values are set in Functions runtime and phone is in `2547XXXXXXXX` or `2517/2519XXXXXXXX` format.
 
-## Hackathon Focus
-
-This codebase prioritizes:
-- polished, demo-ready UX
-- smooth critical flow
-- low setup friction
-- practical implementation over over-engineering
 
