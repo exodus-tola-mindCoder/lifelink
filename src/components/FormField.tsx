@@ -31,6 +31,7 @@ export function FormField({
         editable={editable}
         onChangeText={onChangeText}
         placeholder={placeholder}
+        placeholderTextColor="#A8A29E"
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
         autoCapitalize="none"
@@ -46,31 +47,28 @@ const styles = StyleSheet.create({
     gap: 8
   },
   label: {
-    fontSize: 11,
-    color: theme.colors.primary,
-    fontWeight: "700",
-    letterSpacing: 1,
-    textTransform: "uppercase"
+    fontSize: 14,
+    color: theme.colors.text,
+    fontWeight: "600"
   },
   input: {
-    borderWidth: 1,
-    borderBottomWidth: 2,
+    borderWidth: 1.5,
     borderColor: theme.colors.border,
-    borderRadius: theme.radius.none,
+    borderRadius: theme.radius.md,
     backgroundColor: "#FFFFFF",
     color: theme.colors.text,
     paddingHorizontal: 16,
-    minHeight: 56,
-    fontSize: 16
+    minHeight: 52,
+    fontSize: 15
   },
   readOnly: {
-    backgroundColor: "#F4F4F5",
+    backgroundColor: theme.colors.warmGray,
     color: theme.colors.mutedText,
-    borderColor: "#E4E4E7"
+    borderColor: theme.colors.border
   },
   error: {
     color: theme.colors.danger,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: "600"
   }
 });

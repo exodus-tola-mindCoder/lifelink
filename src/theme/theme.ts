@@ -1,43 +1,47 @@
 export const theme = {
   colors: {
-    background: "#FAFAFA",
+    background: "#FFF5F0",
     surface: "#FFFFFF",
-    primary: "#09090B",
-    primaryDark: "#000000",
-    text: "#09090B",
-    mutedText: "#71717A",
-    success: "#10B981",
-    warning: "#F59E0B",
-    border: "#E4E4E7",
-    accent: "#E11D48",
-    danger: "#EF4444"
+    primary: "#DC2626",
+    primaryDark: "#B91C1C",
+    primaryLight: "#FEE2E2",
+    text: "#1C1917",
+    mutedText: "#78716C",
+    success: "#16A34A",
+    warning: "#D97706",
+    border: "#F5E6E0",
+    accent: "#DC2626",
+    danger: "#EF4444",
+    cream: "#FFF5F0",
+    warmGray: "#F5F0EB"
   },
   spacing: {
-    xs: 8,
+    xs: 6,
+    sm: 10,
+    md: 16,
+    lg: 24,
+    xl: 36,
+    xxl: 56
+  },
+  radius: {
     sm: 12,
     md: 16,
     lg: 24,
-    xl: 40,
-    xxl: 64
-  },
-  radius: {
-    none: 0,
-    sm: 4,
-    md: 8,
-    lg: 12
+    xl: 32,
+    full: 999
   },
   shadow: {
     card: {
-      shadowColor: "#09090B",
-      shadowOpacity: 0.04,
-      shadowRadius: 12,
-      shadowOffset: { width: 0, height: 4 },
-      elevation: 2
+      shadowColor: "#78716C",
+      shadowOpacity: 0.08,
+      shadowRadius: 16,
+      shadowOffset: { width: 0, height: 6 },
+      elevation: 3
     },
-    hover: {
-      shadowColor: "#E11D48",
-      shadowOpacity: 0.1,
-      shadowRadius: 20,
+    soft: {
+      shadowColor: "#DC2626",
+      shadowOpacity: 0.08,
+      shadowRadius: 24,
       shadowOffset: { width: 0, height: 8 },
       elevation: 4
     }

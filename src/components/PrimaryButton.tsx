@@ -25,7 +25,7 @@ export function PrimaryButton({ label, onPress, disabled, loading, variant = "pr
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={isOutline ? theme.colors.primary : "#F8FAFC"} />
+        <ActivityIndicator color={isOutline ? theme.colors.primary : "#FFFFFF"} />
       ) : (
         <Text style={[styles.text, isOutline ? styles.outlineText : styles.primaryText]}>
           {label}
@@ -37,32 +37,31 @@ export function PrimaryButton({ label, onPress, disabled, loading, variant = "pr
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 56,
-    borderRadius: theme.radius.none,
+    minHeight: 54,
+    borderRadius: theme.radius.lg,
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: theme.spacing.lg
   },
   primaryButton: {
     backgroundColor: theme.colors.primary,
+    ...theme.shadow.soft
   },
   outlineButton: {
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: theme.colors.primary,
     backgroundColor: "transparent"
   },
   pressed: {
-    opacity: 0.8,
-    transform: [{ scale: 0.98 }]
+    opacity: 0.85,
+    transform: [{ scale: 0.97 }]
   },
   disabled: {
-    opacity: 0.4
+    opacity: 0.45
   },
   text: {
-    fontSize: 15,
-    fontWeight: "700",
-    letterSpacing: 1,
-    textTransform: "uppercase"
+    fontSize: 16,
+    fontWeight: "700"
   },
   primaryText: {
     color: "#FFFFFF"

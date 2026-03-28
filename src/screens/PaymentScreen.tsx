@@ -109,76 +109,75 @@ export function PaymentScreen({ route }: Props) {
 
   return (
     <Screen>
-      <View style={styles.header}>
-        <Text style={styles.title}>TRANSPORT COVERAGE</Text>
-        <Text style={styles.sub}>
-          Emergency request for <Text style={styles.highlight}>{currentRequest.hospitalName}</Text>
-        </Text>
+      <View style={styles.headerInfo}>
+        <View style={styles.headerBadge}>
+          <Text style={styles.headerBadgeText}>{currentRequest.bloodType}</Text>
+        </View>
+        <View>
+          <Text style={styles.title}>Transport Payment</Text>
+          <Text style={styles.sub}>{currentRequest.hospitalName}</Text>
+        </View>
       </View>
 
-      <View style={styles.invoiceCard}>
-        <View style={styles.invoiceHeader}>
-          <Text style={styles.invoiceTitle}>M-PESA CHECKOUT</Text>
+      <View style={styles.card}>
+        <FormField
+          label="Suggested Amount (KES)"
+          value={String(suggested)}
+          onChangeText={() => undefined}
+          editable={false}
+        />
+
+        <FormField
+          label="Your Amount (KES)"
+          value={customAmount}
+          onChangeText={setCustomAmount}
+          keyboardType="numeric"
+          editable={!coverFull}
+        />
+
+        <FormField
+          label="M-Pesa Phone Number"
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="numeric"
+          placeholder="2547XXXXXXXX or 2517XXXXXXXX"
+        />
+
+        <View style={styles.checkboxRow}>
+          <Checkbox
+            value={coverFull}
+            onValueChange={setCoverFull}
+            color={coverFull ? theme.colors.primary : undefined}
+          />
+          <Text style={styles.checkboxLabel}>Cover full transport expense</Text>
         </View>
 
-        <View style={styles.invoiceBody}>
-          <FormField
-            label="SUGGESTED AMOUNT (KES)"
-            value={String(suggested)}
-            onChangeText={() => undefined}
-            editable={false}
-          />
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+        {loading ? <Text style={styles.loadingText}>{loadingMessage}</Text> : null}
 
-          <FormField
-            label="ADJUST AMOUNT (KES)"
-            value={customAmount}
-            onChangeText={setCustomAmount}
-            keyboardType="numeric"
-            editable={!coverFull}
-          />
-
-          <FormField
-            label="M-PESA PHONE NUMBER"
-            value={phone}
-            onChangeText={setPhone}
-            keyboardType="numeric"
-            placeholder="2547XXXXXXXX or 2517XXXXXXXX"
-          />
-
-          <View style={styles.checkboxRow}>
-            <Checkbox value={coverFull} onValueChange={setCoverFull} color={coverFull ? theme.colors.accent : undefined} />
-            <Text style={styles.checkboxLabel}>Cover full transport expense</Text>
-          </View>
-
-          {error ? <Text style={styles.error}>{error}</Text> : null}
-          {loading ? <Text style={styles.loadingText}>{loadingMessage}</Text> : null}
-          <View style={{ marginTop: 12 }}>
-            <PrimaryButton label="AUTHORIZE PAYMENT" loading={loading} onPress={() => void payNow()} />
-          </View>
-        </View>
+        <PrimaryButton label="Pay with M-Pesa" loading={loading} onPress={() => void payNow()} />
       </View>
 
       {result ? (
-        <View style={styles.success}>
-          <View style={styles.successHeader}>
-            <Text style={styles.successTitle}>PAYMENT SUCCESSFUL</Text>
+        <View style={styles.successCard}>
+          <View style={styles.successIcon}>
+            <Text style={styles.successCheck}>✓</Text>
           </View>
-          <View style={styles.successBody}>
-            <View style={styles.receiptRow}>
-              <Text style={styles.receiptLabel}>AMOUNT PAID</Text>
-              <Text style={styles.receiptValue}>KES {result.amount}</Text>
-            </View>
-            <View style={styles.receiptRow}>
-              <Text style={styles.receiptLabel}>TRANSACTION ID</Text>
-              <Text style={styles.receiptValue}>{result.txId}</Text>
-            </View>
-            {result.message ? (
-              <View style={[styles.receiptRow, { borderBottomWidth: 0 }]}>
-                <Text style={styles.receiptLabel}>STATUS</Text>
-                <Text style={styles.receiptValue}>{result.message}</Text>
-              </View>
-            ) : null}
+          <Text style={styles.successTitle}>Payment Successful</Text>
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Amount Paid</Text>
+            <Text style={styles.receiptValue}>KES {result.amount}</Text>
           </View>
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Transaction ID</Text>
+            <Text style={styles.receiptValue}>{result.txId}</Text>
+          </View>
+          {result.message ? (
+            <View style={[styles.receiptRow, { borderBottomWidth: 0 }]}>
+              <Text style={styles.receiptLabel}>Message</Text>
+              <Text style={styles.receiptValue}>{result.message}</Text>
+            </View>
+          ) : null}
         </View>
       ) : null}
     </Screen>
@@ -186,114 +185,116 @@ export function PaymentScreen({ route }: Props) {
 }
 
 const styles = StyleSheet.create({
-  header: {
-    marginBottom: 32,
-    borderLeftWidth: 4,
-    borderLeftColor: theme.colors.primary,
-    paddingLeft: 16
+  headerInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+    marginBottom: 24
+  },
+  headerBadge: {
+    width: 52,
+    height: 52,
+    borderRadius: theme.radius.md,
+    backgroundColor: theme.colors.primaryLight,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  headerBadgeText: {
+    fontSize: 20,
+    fontWeight: "900",
+    color: theme.colors.primary
   },
   title: {
-    fontSize: 28,
-    fontWeight: "900",
-    color: theme.colors.primary,
-    letterSpacing: -1
-  },
-  sub: {
-    marginTop: 8,
-    color: theme.colors.mutedText,
-    lineHeight: 24,
-    fontSize: 16
-  },
-  highlight: {
+    fontSize: 22,
     fontWeight: "800",
     color: theme.colors.text
   },
-  invoiceCard: {
-    borderWidth: 1,
-    borderColor: theme.colors.border,
+  sub: {
+    fontSize: 14,
+    color: theme.colors.mutedText,
+    marginTop: 2
+  },
+  card: {
     backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.lg,
+    padding: 20,
+    gap: theme.spacing.md,
     ...theme.shadow.card
-  },
-  invoiceHeader: {
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-    padding: theme.spacing.lg,
-    backgroundColor: "#F4F4F5"
-  },
-  invoiceTitle: {
-    fontSize: 12,
-    fontWeight: "800",
-    letterSpacing: 2,
-    color: theme.colors.primary
-  },
-  invoiceBody: {
-    padding: theme.spacing.lg,
-    gap: theme.spacing.lg
   },
   checkboxRow: {
     flexDirection: "row",
-    gap: theme.spacing.md,
+    gap: theme.spacing.sm,
     alignItems: "center",
-    paddingVertical: 8
+    paddingVertical: 4
   },
   checkboxLabel: {
     flex: 1,
-    color: theme.colors.primary,
-    fontWeight: "600",
-    letterSpacing: 0.5
+    color: theme.colors.text,
+    fontWeight: "500",
+    fontSize: 14
   },
   error: {
     color: theme.colors.danger,
-    fontWeight: "700",
-    backgroundColor: "#FEE2E2",
+    fontWeight: "600",
+    fontSize: 13,
+    backgroundColor: "#FEF2F2",
     padding: 12,
-    borderLeftWidth: 4,
-    borderLeftColor: theme.colors.danger
+    borderRadius: theme.radius.sm,
+    overflow: "hidden"
   },
   loadingText: {
-    color: theme.colors.accent,
-    fontWeight: "800",
-    letterSpacing: 1,
-    fontSize: 12,
+    color: theme.colors.primary,
+    fontWeight: "600",
+    fontSize: 14,
     textAlign: "center"
   },
-  success: {
-    marginTop: theme.spacing.xl,
-    borderWidth: 1,
+  successCard: {
+    marginTop: theme.spacing.lg,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.radius.lg,
+    padding: 24,
+    alignItems: "center",
+    gap: theme.spacing.sm,
+    borderWidth: 1.5,
     borderColor: theme.colors.success,
-    backgroundColor: theme.colors.surface
+    ...theme.shadow.card
   },
-  successHeader: {
+  successIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: theme.colors.success,
-    padding: theme.spacing.md
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 4
+  },
+  successCheck: {
+    color: "#FFFFFF",
+    fontSize: 24,
+    fontWeight: "800"
   },
   successTitle: {
-    color: "#FFFFFF",
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: "800",
-    letterSpacing: 2,
-    textAlign: "center"
-  },
-  successBody: {
-    padding: theme.spacing.lg
+    color: theme.colors.success,
+    marginBottom: 8
   },
   receiptRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 12,
+    width: "100%",
+    paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-    borderStyle: "dashed"
+    borderBottomColor: theme.colors.border
   },
   receiptLabel: {
-    fontSize: 11,
-    fontWeight: "700",
-    letterSpacing: 1,
-    color: theme.colors.mutedText
+    fontSize: 13,
+    color: theme.colors.mutedText,
+    fontWeight: "500"
   },
   receiptValue: {
     fontSize: 14,
-    fontWeight: "800",
-    color: theme.colors.primary
+    fontWeight: "700",
+    color: theme.colors.text
   }
 });

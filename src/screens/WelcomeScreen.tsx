@@ -20,35 +20,39 @@ export function WelcomeScreen({ navigation }: Props) {
   return (
     <Screen scroll={false} padded={false}>
       <View style={styles.container}>
-        <View style={styles.topSection}>
-          <View style={styles.accentLine} />
-          <Text style={styles.eyebrow}>CRITICAL RESPONSE</Text>
-          <Text style={styles.title}>LifeLink.</Text>
-          <Text style={styles.subtitle}>
-            A real-time synchronization layer for emergency blood logistics.
+        <View style={styles.heroSection}>
+          <View style={styles.logoContainer}>
+            <View style={styles.logoBg}>
+              <View style={styles.logoCircle}>
+                <View style={styles.logoDrop} />
+              </View>
+            </View>
+          </View>
+
+          <Text style={styles.appName}>LifeLink</Text>
+          <Text style={styles.tagline}>
+            Connect with blood donors nearby.{"\n"}Save lives in real-time.
           </Text>
         </View>
 
         <View style={styles.bottomSection}>
-          <View style={styles.block}>
-            <PrimaryButton label="Sign in as Donor" onPress={() => void pickRole("donor")} />
+          <View style={styles.buttons}>
+            <PrimaryButton label="Continue as Donor" onPress={() => void pickRole("donor")} />
             <PrimaryButton
-              label="Sign in as Hospital"
+              label="Continue as Hospital"
               onPress={() => void pickRole("hospital")}
               variant="outline"
             />
           </View>
 
           <View style={styles.demoCard}>
-            <Text style={styles.demoLabel}>DEMO CREDENTIALS</Text>
-            <View style={styles.demoRow}>
-              <Text style={styles.demoRole}>Donor</Text>
-              <Text style={styles.demoCreds}>donor.a@lifelink.app / password123</Text>
-            </View>
-            <View style={styles.demoRow}>
-              <Text style={styles.demoRole}>Hospital</Text>
-              <Text style={styles.demoCreds}>hospital@lifelink.app / password123</Text>
-            </View>
+            <Text style={styles.demoTitle}>Demo Credentials</Text>
+            <Text style={styles.demoCreds}>
+              Donor: donor.a@lifelink.app / password123
+            </Text>
+            <Text style={styles.demoCreds}>
+              Hospital: hospital@lifelink.app / password123
+            </Text>
           </View>
         </View>
       </View>
@@ -60,77 +64,74 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
-    paddingHorizontal: theme.spacing.lg,
+    paddingHorizontal: 24,
     paddingTop: 80,
-    paddingBottom: theme.spacing.xl,
+    paddingBottom: 40,
     backgroundColor: theme.colors.background,
   },
-  topSection: {
-    gap: theme.spacing.sm,
+  heroSection: {
+    alignItems: "center",
+    gap: theme.spacing.md
   },
-  accentLine: {
-    width: 48,
-    height: 4,
-    backgroundColor: theme.colors.accent,
-    marginBottom: theme.spacing.md,
+  logoContainer: {
+    marginBottom: 16
   },
-  eyebrow: {
-    color: theme.colors.accent,
-    letterSpacing: 2,
-    textTransform: "uppercase",
-    fontSize: 11,
-    fontWeight: "700",
+  logoBg: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: theme.colors.primaryLight,
+    alignItems: "center",
+    justifyContent: "center"
   },
-  title: {
-    fontSize: 56,
-    fontWeight: "900",
-    color: theme.colors.primary,
-    letterSpacing: -2,
-    lineHeight: 60,
+  logoCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: theme.colors.primary,
+    alignItems: "center",
+    justifyContent: "center"
   },
-  subtitle: {
-    fontSize: 18,
+  logoDrop: {
+    width: 20,
+    height: 24,
+    borderRadius: 10,
+    backgroundColor: "#FFFFFF"
+  },
+  appName: {
+    fontSize: 36,
+    fontWeight: "800",
+    color: theme.colors.text,
+    letterSpacing: -1
+  },
+  tagline: {
+    fontSize: 16,
     color: theme.colors.mutedText,
-    lineHeight: 26,
-    marginTop: 8,
-    maxWidth: 320,
-    fontWeight: "400",
+    textAlign: "center",
+    lineHeight: 24
   },
   bottomSection: {
-    gap: theme.spacing.xl,
+    gap: theme.spacing.xl
   },
-  block: {
-    gap: theme.spacing.md,
+  buttons: {
+    gap: theme.spacing.sm
   },
   demoCard: {
     backgroundColor: theme.colors.surface,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
+    borderRadius: theme.radius.lg,
     padding: theme.spacing.lg,
-    gap: theme.spacing.sm,
+    gap: 6,
+    ...theme.shadow.card
   },
-  demoLabel: {
-    fontSize: 10,
-    fontWeight: "800",
-    color: theme.colors.mutedText,
-    letterSpacing: 1.5,
-    marginBottom: 4,
-  },
-  demoRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-    paddingBottom: 8,
-  },
-  demoRole: {
+  demoTitle: {
     fontSize: 13,
     fontWeight: "700",
     color: theme.colors.text,
+    marginBottom: 4
   },
   demoCreds: {
     fontSize: 13,
     color: theme.colors.mutedText,
-    fontFamily: "monospace",
-  },
+    lineHeight: 20
+  }
 });

@@ -12,9 +12,7 @@ type Props = {
 
 export function Screen({ children, padded = true, scroll = true }: Props) {
   const content = (
-    <View style={[styles.content, padded && styles.padded]}>
-      <View style={styles.inner}>{children}</View>
-    </View>
+    <View style={[styles.content, padded && styles.padded]}>{children}</View>
   );
 
   return (
@@ -23,7 +21,16 @@ export function Screen({ children, padded = true, scroll = true }: Props) {
         style={styles.safe}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        {scroll ? <ScrollView contentContainerStyle={styles.scroll}>{content}</ScrollView> : content}
+        {scroll ? (
+          <ScrollView
+            contentContainerStyle={styles.scroll}
+            showsVerticalScrollIndicator={false}
+          >
+            {content}
+          </ScrollView>
+        ) : (
+          content
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -40,13 +47,8 @@ const styles = StyleSheet.create({
   content: {
     flex: 1
   },
-  inner: {
-    width: "100%",
-    maxWidth: 720,
-    alignSelf: "center"
-  },
   padded: {
-    paddingHorizontal: theme.spacing.md,
+    paddingHorizontal: 20,
     paddingVertical: theme.spacing.lg
   }
 });
