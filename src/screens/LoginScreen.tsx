@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 
+import { AppLogo } from "../components/AppLogo";
 import { FormField } from "../components/FormField";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { Screen } from "../components/Screen";
@@ -41,11 +42,8 @@ export function LoginScreen({ navigation }: Props) {
 
   return (
     <Screen>
-      <View style={styles.logoRow}>
-        <View style={styles.logoSmall}>
-          <View style={styles.logoDrop} />
-        </View>
-        <Text style={styles.logoText}>LifeLink</Text>
+      <View style={styles.logoWrap}>
+        <AppLogo size="sm" />
       </View>
 
       <Text style={styles.title}>Login</Text>
@@ -88,30 +86,9 @@ export function LoginScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
-  logoRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 32
-  },
-  logoSmall: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: theme.colors.primary,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  logoDrop: {
-    width: 12,
-    height: 14,
-    borderRadius: 6,
-    backgroundColor: "#FFFFFF"
-  },
-  logoText: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: theme.colors.primary
+  logoWrap: {
+    alignItems: "flex-start",
+    marginBottom: 20
   },
   title: {
     fontSize: 28,

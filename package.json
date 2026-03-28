@@ -25,6 +25,7 @@
     "expo": "^55.0.10-canary-20260327-0789fbc",
     "expo-checkbox": "^55.0.4-canary-20260327-0789fbc",
     "expo-constants": "^55.0.10-canary-20260327-0789fbc",
+    "expo-linear-gradient": "55.0.10-canary-20260327-0789fbc",
     "expo-location": "^55.1.5-canary-20260327-0789fbc",
     "expo-status-bar": "^55.0.5-canary-20260327-0789fbc",
     "firebase": "^12.11.0",

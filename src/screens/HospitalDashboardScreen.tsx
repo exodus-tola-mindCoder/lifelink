@@ -1,6 +1,8 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useMemo, useState } from "react";
 
+import { AppLogo } from "../components/AppLogo";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { Screen } from "../components/Screen";
 import { useApp } from "../context/AppContext";
@@ -30,26 +32,16 @@ export function HospitalDashboardScreen() {
   }
 
   return (
-    <Screen>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>
-              {currentUser?.name?.charAt(0)?.toUpperCase() ?? "H"}
-            </Text>
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.greeting}>Welcome back,</Text>
-            <Text style={styles.name}>{currentUser?.name}</Text>
-          </View>
+    <View style={{ flex: 1, backgroundColor: "#FFF" }}>
+      <LinearGradient colors={["#FFE4E6", "#FFFFFF"]} style={styles.headerGradient}>
+        <View style={styles.headerTop}>
+          <AppLogo size="sm" />
+          <PrimaryButton label="Logout" onPress={() => void logout()} variant="outline" size="sm" />
         </View>
-        <PrimaryButton label="Logout" onPress={() => void logout()} variant="outline" />
-      </View>
+        <Text style={styles.pageTitle}>New Blood Request</Text>
+      </LinearGradient>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Post a Blood Donation Request</Text>
-        <Text style={styles.cardSub}>Request blood to thousands of nearby users.</Text>
-
+      <Screen scroll={true} padded={true}>
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>Blood Type</Text>
           <View style={styles.chipRow}>
@@ -69,152 +61,129 @@ export function HospitalDashboardScreen() {
 
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>Urgency Level</Text>
-          <View style={styles.chipRow}>
-            {urgencyLevels.map((level) => (
-              <Pressable
-                key={level}
-                onPress={() => setUrgency(level)}
-                style={[styles.chip, urgency === level && styles.chipActive]}
-              >
-                <Text style={[styles.chipText, urgency === level && styles.chipTextActive]}>
-                  {level.charAt(0).toUpperCase() + level.slice(1)}
-                </Text>
-              </Pressable>
-            ))}
+          <View style={styles.segmentedControl}>
+            {urgencyLevels.map((level, i) => {
+              const isActive = urgency === level;
+              return (
+                <Pressable
+                  key={level}
+                  onPress={() => setUrgency(level)}
+                  style={[
+                    styles.segmentButton,
+                    isActive && styles.segmentActive,
+                    i === 0 && styles.segmentFirst,
+                    i === urgencyLevels.length - 1 && styles.segmentLast
+                  ]}
+                >
+                  <Text style={[styles.segmentText, isActive && styles.segmentTextActive]}>
+                    {level.charAt(0).toUpperCase() + level.slice(1)}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
         </View>
 
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>Search Radius: {radiusKm} km</Text>
           <View style={styles.chipRow}>
-            {[5, 8, 10].map((km) => (
+            {[5, 8, 10, 15].map((km) => (
               <Pressable
                 key={km}
                 onPress={() => setRadiusKm(km)}
                 style={[styles.chip, radiusKm === km && styles.chipActive]}
               >
                 <Text style={[styles.chipText, radiusKm === km && styles.chipTextActive]}>
-                  {km} km
+                  {km}
                 </Text>
               </Pressable>
             ))}
           </View>
         </View>
 
-        <PrimaryButton label="Get Started" loading={saving} onPress={() => void submitRequest()} />
-      </View>
-
-      <Text style={styles.sectionTitle}>Active Requests</Text>
-
-      {ownRequests.length === 0 ? (
-        <View style={styles.emptyCard}>
-          <Text style={styles.emptyText}>No requests yet</Text>
-          <Text style={styles.emptyHint}>Post a request to notify nearby donors.</Text>
+        <View style={{ marginTop: 10 }}>
+          <PrimaryButton label="Broadcast Request" loading={saving} onPress={() => void submitRequest()} />
         </View>
-      ) : (
-        ownRequests.map((request) => (
-          <View key={request.id} style={styles.requestCard}>
-            <View style={styles.requestTop}>
-              <View style={styles.requestBadge}>
-                <Text style={styles.requestBadgeText}>{request.bloodType}</Text>
-              </View>
-              <View
-                style={[
-                  styles.statusPill,
-                  request.status === "fulfilled" ? styles.statusDone : styles.statusOpen
-                ]}
-              >
-                <Text
+
+        <Text style={styles.sectionTitle}>Active Requests</Text>
+
+        {ownRequests.length === 0 ? (
+          <View style={styles.emptyCard}>
+            <Text style={styles.emptyText}>No active requests.</Text>
+          </View>
+        ) : (
+          ownRequests.map((request) => (
+            <View key={request.id} style={styles.requestCard}>
+              <View style={styles.requestTop}>
+                <View style={styles.requestBadge}>
+                  <Text style={styles.requestBadgeText}>{request.bloodType}</Text>
+                </View>
+                <View
                   style={[
-                    styles.statusPillText,
-                    request.status === "fulfilled" ? styles.statusDoneText : styles.statusOpenText
+                    styles.statusPill,
+                    request.status === "fulfilled" ? styles.statusDone : styles.statusOpen
                   ]}
                 >
-                  {request.status === "fulfilled" ? "Fulfilled" : "Open"}
-                </Text>
+                  <Text
+                    style={[
+                      styles.statusPillText,
+                      request.status === "fulfilled" ? styles.statusDoneText : styles.statusOpenText
+                    ]}
+                  >
+                    {request.status === "fulfilled" ? "Fulfilled" : "Open"}
+                  </Text>
+                </View>
               </View>
+              <Text style={styles.requestMeta}>
+                Urgency: {request.urgency.charAt(0).toUpperCase() + request.urgency.slice(1)}
+              </Text>
+              <Text style={styles.requestMeta}>
+                Matched: {request.matchedCount} donors  ·  Responded: {request.responderIds.length}
+              </Text>
+              <Text style={styles.requestMeta}>
+                Transport: KES {request.suggestedTransportAmount}
+              </Text>
+              {request.status === "open" ? (
+                <View style={{ marginTop: 8 }}>
+                  <PrimaryButton
+                    label="Mark as Fulfilled"
+                    variant="outline"
+                    onPress={() => void markFulfilled(request.id)}
+                    size="sm"
+                  />
+                </View>
+              ) : null}
             </View>
-            <Text style={styles.requestMeta}>
-              Urgency: {request.urgency.charAt(0).toUpperCase() + request.urgency.slice(1)}
-            </Text>
-            <Text style={styles.requestMeta}>
-              Matched: {request.matchedCount} donors  ·  Responded: {request.responderIds.length}
-            </Text>
-            <Text style={styles.requestMeta}>
-              Transport: KES {request.suggestedTransportAmount}
-            </Text>
-            {request.status === "open" ? (
-              <PrimaryButton
-                label="Mark as Fulfilled"
-                variant="outline"
-                onPress={() => void markFulfilled(request.id)}
-              />
-            ) : null}
-          </View>
-        ))
-      )}
-    </Screen>
+          ))
+        )}
+      </Screen>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: {
+  headerGradient: {
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingBottom: 20
+  },
+  headerTop: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: theme.spacing.lg
-  },
-  headerLeft: {
-    flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    flex: 1
+    marginBottom: 24
   },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: theme.colors.primary,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  avatarText: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: "800"
-  },
-  greeting: {
-    fontSize: 14,
-    color: theme.colors.mutedText
-  },
-  name: {
-    fontSize: 20,
+  pageTitle: {
+    fontSize: 28,
     fontWeight: "800",
     color: theme.colors.text
-  },
-  card: {
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.lg,
-    padding: 20,
-    gap: theme.spacing.lg,
-    marginBottom: theme.spacing.lg,
-    ...theme.shadow.card
-  },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: theme.colors.text
-  },
-  cardSub: {
-    fontSize: 14,
-    color: theme.colors.mutedText,
-    marginTop: -12
   },
   fieldGroup: {
-    gap: 10
+    gap: 12,
+    marginBottom: 24
   },
   label: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: "600",
     color: theme.colors.text
   },
@@ -224,13 +193,14 @@ const styles = StyleSheet.create({
     gap: 8
   },
   chip: {
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: theme.colors.border,
-    borderRadius: theme.radius.sm,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     backgroundColor: theme.colors.surface,
-    alignItems: "center"
+    alignItems: "center",
+    minWidth: 56
   },
   chipActive: {
     backgroundColor: theme.colors.primary,
@@ -238,65 +208,92 @@ const styles = StyleSheet.create({
   },
   chipText: {
     color: theme.colors.text,
-    fontWeight: "700",
-    fontSize: 14
+    fontWeight: "600",
+    fontSize: 15
   },
   chipTextActive: {
     color: "#FFFFFF"
+  },
+  segmentedControl: {
+    flexDirection: "row",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    overflow: "hidden"
+  },
+  segmentButton: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: theme.colors.surface,
+    borderLeftWidth: 1,
+    borderLeftColor: theme.colors.border
+  },
+  segmentFirst: {
+    borderLeftWidth: 0
+  },
+  segmentLast: {},
+  segmentActive: {
+    backgroundColor: "#FEE2E2"
+  },
+  segmentText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: theme.colors.mutedText
+  },
+  segmentTextActive: {
+    color: theme.colors.primaryDark
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: "700",
     color: theme.colors.text,
-    marginBottom: theme.spacing.md
+    marginTop: 32,
+    marginBottom: 16
   },
   emptyCard: {
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.lg,
-    padding: 40,
+    borderRadius: 16,
+    padding: 30,
     alignItems: "center",
-    gap: 6,
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: theme.colors.border,
-    borderStyle: "dashed",
-    marginBottom: theme.spacing.lg
+    borderStyle: "dashed"
   },
   emptyText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: theme.colors.text
-  },
-  emptyHint: {
-    fontSize: 13,
+    fontSize: 15,
+    fontWeight: "500",
     color: theme.colors.mutedText
   },
   requestCard: {
     backgroundColor: theme.colors.surface,
-    borderRadius: theme.radius.lg,
+    borderRadius: 20,
     padding: 20,
-    gap: theme.spacing.sm,
-    marginBottom: theme.spacing.md,
+    gap: 10,
+    marginBottom: 16,
     ...theme.shadow.card
   },
   requestTop: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
+    marginBottom: 4
   },
   requestBadge: {
-    backgroundColor: theme.colors.primary,
-    borderRadius: theme.radius.sm,
-    paddingHorizontal: 14,
+    backgroundColor: theme.colors.primaryLight,
+    borderRadius: 8,
+    paddingHorizontal: 12,
     paddingVertical: 6
   },
   requestBadgeText: {
-    color: "#FFFFFF",
-    fontWeight: "900",
-    fontSize: 18
+    color: theme.colors.primaryDark,
+    fontWeight: "800",
+    fontSize: 16
   },
   statusPill: {
-    borderRadius: theme.radius.full,
-    paddingHorizontal: 14,
+    borderRadius: 999,
+    paddingHorizontal: 12,
     paddingVertical: 4
   },
   statusOpen: {

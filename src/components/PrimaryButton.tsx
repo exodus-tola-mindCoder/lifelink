@@ -7,11 +7,21 @@ type Props = {
   onPress: () => void;
   disabled?: boolean;
   loading?: boolean;
-  variant?: "primary" | "outline";
+  variant?: "primary" | "outline" | "payment";
+  size?: "md" | "sm";
 };
 
-export function PrimaryButton({ label, onPress, disabled, loading, variant = "primary" }: Props) {
+export function PrimaryButton({
+  label,
+  onPress,
+  disabled,
+  loading,
+  variant = "primary",
+  size = "md"
+}: Props) {
   const isOutline = variant === "outline";
+  const isPayment = variant === "payment";
+  const isSmall = size === "sm";
 
   return (
     <Pressable
@@ -19,15 +29,27 @@ export function PrimaryButton({ label, onPress, disabled, loading, variant = "pr
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
-        isOutline ? styles.outlineButton : styles.primaryButton,
+        isSmall && styles.buttonSmall,
+        isOutline && styles.outlineButton,
+        isPayment && styles.paymentButton,
+        !isOutline && !isPayment && styles.primaryButton,
         pressed && !(disabled || loading) && styles.pressed,
         (disabled || loading) && styles.disabled
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={isOutline ? theme.colors.primary : "#FFFFFF"} />
+        <ActivityIndicator
+          color={isOutline || isPayment ? theme.colors.paymentDark : "#FFFFFF"}
+        />
       ) : (
-        <Text style={[styles.text, isOutline ? styles.outlineText : styles.primaryText]}>
+        <Text
+          style={[
+            styles.text,
+            isOutline && styles.outlineText,
+            isPayment && styles.paymentText,
+            !isOutline && !isPayment && styles.primaryText
+          ]}
+        >
           {label}
         </Text>
       )}
@@ -43,9 +65,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: theme.spacing.lg
   },
+  buttonSmall: {
+    minHeight: 40,
+    borderRadius: theme.radius.md,
+    paddingHorizontal: theme.spacing.md
+  },
   primaryButton: {
     backgroundColor: theme.colors.primary,
     ...theme.shadow.soft
+  },
+  paymentButton: {
+    backgroundColor: theme.colors.paymentYellow,
+    shadowColor: theme.colors.paymentYellow,
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 4
   },
   outlineButton: {
     borderWidth: 1.5,
@@ -68,5 +103,8 @@ const styles = StyleSheet.create({
   },
   outlineText: {
     color: theme.colors.primary
+  },
+  paymentText: {
+    color: theme.colors.paymentDark
   }
 });

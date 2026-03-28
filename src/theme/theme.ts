@@ -1,19 +1,21 @@
 export const theme = {
   colors: {
-    background: "#FFF5F0",
+    background: "#F8F9FA",
     surface: "#FFFFFF",
-    primary: "#DC2626",
-    primaryDark: "#B91C1C",
+    primary: "#991B1B", // Darker red for main brand
+    primaryDark: "#7F1D1D",
     primaryLight: "#FEE2E2",
-    text: "#1C1917",
-    mutedText: "#78716C",
+    text: "#111827",
+    mutedText: "#6B7280",
     success: "#16A34A",
     warning: "#D97706",
-    border: "#F5E6E0",
-    accent: "#DC2626",
+    border: "#E5E7EB",
+    accent: "#DC2626", // Bright red for badges/buttons
     danger: "#EF4444",
     cream: "#FFF5F0",
-    warmGray: "#F5F0EB"
+    warmGray: "#F3F4F6",
+    paymentDark: "#1F2937",
+    paymentYellow: "#FBBF24"
   },
   spacing: {
     xs: 6,
@@ -32,17 +34,17 @@ export const theme = {
   },
   shadow: {
     card: {
-      shadowColor: "#78716C",
-      shadowOpacity: 0.08,
-      shadowRadius: 16,
-      shadowOffset: { width: 0, height: 6 },
-      elevation: 3
+      shadowColor: "#111827",
+      shadowOpacity: 0.04,
+      shadowRadius: 12,
+      shadowOffset: { width: 0, height: 4 },
+      elevation: 2
     },
     soft: {
-      shadowColor: "#DC2626",
-      shadowOpacity: 0.08,
-      shadowRadius: 24,
-      shadowOffset: { width: 0, height: 8 },
+      shadowColor: "#991B1B",
+      shadowOpacity: 0.12,
+      shadowRadius: 16,
+      shadowOffset: { width: 0, height: 6 },
       elevation: 4
     }
   }

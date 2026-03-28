@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useState } from "react";
 
+import { AppLogo } from "../components/AppLogo";
 import { FormField } from "../components/FormField";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { Screen } from "../components/Screen";
@@ -64,6 +65,10 @@ export function SignupScreen({ navigation }: Props) {
 
   return (
     <Screen>
+      <View style={styles.logoWrap}>
+        <AppLogo size="sm" />
+      </View>
+
       <Text style={styles.title}>
         {selectedRole === "donor" ? "Blood Donor" : "Hospital"} Registration
       </Text>
@@ -134,6 +139,10 @@ export function SignupScreen({ navigation }: Props) {
 }
 
 const styles = StyleSheet.create({
+  logoWrap: {
+    alignItems: "flex-start",
+    marginBottom: 20
+  },
   title: {
     fontSize: 26,
     fontWeight: "800",
